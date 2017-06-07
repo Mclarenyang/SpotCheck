@@ -1,15 +1,18 @@
 PODS:
   - Alamofire (4.4.0)
+  - NumberMorphView (0.2.0)
   - TextFieldEffects (1.3.3)
 
 DEPENDENCIES:
   - Alamofire (~> 4.4.0)
+  - NumberMorphView
   - TextFieldEffects (~> 1.3.2)
 
 SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  NumberMorphView: d364796d0c0bd343505b94350b5f4ba8e67de37c
   TextFieldEffects: 8706f53525f1ce51c8921b7af32237caab50c467
 
-PODFILE CHECKSUM: dfb69c6d9d37160ce085543011a855655fe2e800
+PODFILE CHECKSUM: fe992c70d07f5bf21d317201c680dd471c2cbdd2
 
 COCOAPODS: 1.2.1

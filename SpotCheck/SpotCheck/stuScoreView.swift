@@ -10,11 +10,12 @@ import UIKit
 
 class stuScoreView: UIView {
 
+    //成绩
+    var Score = UITextField(frame: CGRect(x:100,y:80,width:100,height:80))
     
-    var name = UILabel(frame: CGRect(x:27,y:73,width:152,height:33))
-    var AllScore = UILabel(frame: CGRect(x:27,y:73,width:152,height:33))
-    var classNum = UILabel(frame: CGRect(x:27,y:73,width:152,height:33))
-    var Score = UITextField(frame: CGRect(x:27,y:73,width:152,height:33))
+    var name = UILabel(frame: CGRect(x:77,y:270,width:200,height:33))
+    var classNum = UILabel(frame: CGRect(x:77,y:333,width:200,height:33))
+    var AllScore = UILabel(frame: CGRect(x:77,y:390,width:200,height:33))
     let image = UIImage(named:"postScoreCell.png")
     
     

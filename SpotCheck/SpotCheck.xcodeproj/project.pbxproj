@@ -125,8 +125,8 @@
 			isa = PBXGroup;
 			children = (
 				464D85F31EE5922C00B42E8A /* classViewController.swift */,
-				46A8B7E01EE694FC0037CE3D /* postScoreViewController.swift */,
 				46A8B7E61EE6CE250037CE3D /* stuViewController.swift */,
+				46A8B7E01EE694FC0037CE3D /* postScoreViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
