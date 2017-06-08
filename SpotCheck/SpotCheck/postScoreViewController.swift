@@ -8,11 +8,12 @@
 
 import UIKit
 
+
 class postScoreViewController: UIViewController {
     
-    var stuNum : Int = 3
-    var viewTag : Int = 1003
-    var myTag : Int!
+    var stuNum : Int!
+    var viewTag : Int!
+    var maxTag : Int!
     
     // Back Button
     var leftbtn = UIButton()
@@ -31,7 +32,7 @@ class postScoreViewController: UIViewController {
         self.view.addSubview(backgView)
         
         //Tag
-        myTag = viewTag
+        maxTag = viewTag
         
         // 返回
         self.navigationItem.hidesBackButton = true
@@ -59,7 +60,7 @@ class postScoreViewController: UIViewController {
         lastBtn.setBackgroundImage(UIImage(named:"nextOne.png"), for: .normal)
         lastBtn.setTitleColor(UIColor.white, for: .normal)
         lastBtn.setTitle("上一个", for: .normal)
-        nextBtn.addTarget(self, action: #selector(lastBtnTap), for: .touchUpInside)
+        lastBtn.addTarget(self, action: #selector(lastBtnTap), for: .touchUpInside)
         self.view.addSubview(lastBtn)
         lastBtn.isHidden = true
         
@@ -95,6 +96,12 @@ class postScoreViewController: UIViewController {
             stuView.classNum.font = UIFont.systemFont(ofSize: 24)
             stuView.AllScore.font = UIFont.systemFont(ofSize: 24)
             stuView.Score.font = UIFont.boldSystemFont(ofSize: 70)
+            
+            // textfild 特别修饰
+            stuView.Score.returnKeyType = UIReturnKeyType.next
+            stuView.Score.keyboardType = .numbersAndPunctuation
+            stuView.Score.textAlignment = .center
+            
             // 测试
             stuView.classNum.text = "2014210386"
             stuView.name.text = "吴啟弘"
@@ -106,15 +113,22 @@ class postScoreViewController: UIViewController {
     }
     
     func nextOne(){
+        
         view.viewWithTag(viewTag)?.removeFromSuperview()
+        //移除动画（will）
+        
         viewTag = viewTag - 1
         
     }
     
     func lastOne(){
         //self.view.addSubview(view.viewWithTag(viewTag)!)
+        //移入动画（will）
+        
         viewTag = viewTag + 1
     }
+    
+    
     
     func nextBtnTap(){
         
@@ -130,22 +144,42 @@ class postScoreViewController: UIViewController {
         }else{
                 nextBtn.setTitle("确定", for: .normal)
             }
+        
+        // 最后一个的提交响应
+        guard viewTag != 1001 else{
+            
+            let alert = UIAlertController(title: "警告", message: "全部打分完毕", preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "提交", style: .cancel, handler: nil)
+            
+            alert.addAction(cancel)
+            self.present(alert, animated: true, completion: nil)
+            
+            return
+        }
+        
          nextOne()
     }
     
+    
+    
     func lastBtnTap(){
         
-//        if viewTag == myTag-1 {
-//            self.lastBtn.isHidden = true
-//            UIView.animate(withDuration: 0.3) { () -> Void in
-//                self.nextBtn.frame = CGRect(x:91,y:615,width:232,height:60)
-//            }
-//        }
-//        if viewTag == 1001 {
-//           nextBtn.setTitle("下一个", for: .normal)
-//        }
-//
-//         lastOne()
+        // 第二个 -> 第一个
+        guard viewTag != maxTag-1 else{
+            self.lastBtn.isHidden = true
+            UIView.animate(withDuration: 0.3) { () -> Void in
+                self.nextBtn.frame = CGRect(x:91,y:615,width:232,height:60)
+            }
+            return
+        }
+        
+        // 最后一个 -> 倒数第二个
+        guard viewTag != 1001 else{
+           nextBtn.setTitle("下一个", for: .normal)
+        return
+        }
+
+         lastOne()
     }
     
     func postScore(){
