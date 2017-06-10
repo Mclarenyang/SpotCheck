@@ -27,6 +27,7 @@
 		46B9C22D1EE688B800C40972 /* class1.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B9C22A1EE688B800C40972 /* class1.png */; };
 		46B9C22E1EE688B800C40972 /* class2.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B9C22B1EE688B800C40972 /* class2.png */; };
 		46B9C22F1EE688B800C40972 /* class3.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B9C22C1EE688B800C40972 /* class3.png */; };
+		46BF2FC31EEBBE5E003DA08E /* student.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BF2FC21EEBBE5E003DA08E /* student.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		46B9C22A1EE688B800C40972 /* class1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = class1.png; sourceTree = "<group>"; };
 		46B9C22B1EE688B800C40972 /* class2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = class2.png; sourceTree = "<group>"; };
 		46B9C22C1EE688B800C40972 /* class3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = class3.png; sourceTree = "<group>"; };
+		46BF2FC21EEBBE5E003DA08E /* student.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = student.swift; sourceTree = "<group>"; };
 		7836B3E4975D97A29ACFE910 /* Pods-SpotCheck.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotCheck.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpotCheck/Pods-SpotCheck.release.xcconfig"; sourceTree = "<group>"; };
 		EE5DC8BD9437B6D07F086684 /* Pods-SpotCheck.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotCheck.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SpotCheck/Pods-SpotCheck.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -134,6 +136,7 @@
 		46A8B7E81EE6D0D00037CE3D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				46BF2FC21EEBBE5E003DA08E /* student.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 				46A8B7E71EE6CE250037CE3D /* stuViewController.swift in Sources */,
 				464D85DE1EE5907200B42E8A /* AppDelegate.swift in Sources */,
 				46A8B7E11EE694FC0037CE3D /* postScoreViewController.swift in Sources */,
+				46BF2FC31EEBBE5E003DA08E /* student.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

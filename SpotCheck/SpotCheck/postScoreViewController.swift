@@ -7,13 +7,18 @@
 //
 
 import UIKit
+import Spring
 
 
 class postScoreViewController: UIViewController {
     
+    // 抽取学生数
     var stuNum : Int!
     var viewTag : Int!
     var maxTag : Int!
+    
+    // 抽取状态
+    var state = 0
     
     // Back Button
     var leftbtn = UIButton()
@@ -103,6 +108,7 @@ class postScoreViewController: UIViewController {
             stuView.Score.textAlignment = .center
             
             // 测试
+            stuView.stuId = "网络返回的 Id"
             stuView.classNum.text = "2014210386"
             stuView.name.text = "吴啟弘"
             stuView.AllScore.text = "总分 11"
@@ -114,17 +120,26 @@ class postScoreViewController: UIViewController {
     
     func nextOne(){
         
-        view.viewWithTag(viewTag)?.removeFromSuperview()
+        let topView = view.viewWithTag(viewTag) as! stuScoreView
         //移除动画（will）
-        
-        viewTag = viewTag - 1
-        
+        topView.x = -300
+        topView.animateToNext {
+            topView.curve = "EaseIn"
+            topView.animateTo()
+        }
+         viewTag = viewTag - 1
+       
     }
     
     func lastOne(){
-        //self.view.addSubview(view.viewWithTag(viewTag)!)
-        //移入动画（will）
         
+        let lastView = view.viewWithTag(viewTag+1) as! stuScoreView
+        //移入动画（will）
+        lastView.x = 0
+        lastView.animateToNext {
+            lastView.curve = "EaseIn"
+            lastView.animateTo()
+        }
         viewTag = viewTag + 1
     }
     
@@ -153,7 +168,7 @@ class postScoreViewController: UIViewController {
             
             alert.addAction(cancel)
             self.present(alert, animated: true, completion: nil)
-            
+            nextOne()
             return
         }
         
@@ -170,24 +185,43 @@ class postScoreViewController: UIViewController {
             UIView.animate(withDuration: 0.3) { () -> Void in
                 self.nextBtn.frame = CGRect(x:91,y:615,width:232,height:60)
             }
+            lastOne()
             return
         }
         
         // 最后一个 -> 倒数第二个
         guard viewTag != 1001 else{
-           nextBtn.setTitle("下一个", for: .normal)
-        return
+            nextBtn.setTitle("下一个", for: .normal)
+            lastOne()
+            return
         }
 
-         lastOne()
+        lastOne()
+        print(viewTag)
     }
     
     func postScore(){
-        //提交分数
+        /// 提交分数
+        //step1: 获取当前的最上层显示视图 as stuScoreView()
+        //step2: 获取视图的 Id 和 分数
+        //step3: 网络请求提交分数
     }
     
     func getInfo(){
         
+        if self.state == 0 {
+         
+            //随机抽取
+            
+        }else{
+        
+            //单个抽取
+            
+        }
+        
+        //step1: 网络请求  ->  type: [("stuId","stuNum")]
+        //step2: 放入一个全局数组
+        //step3: 在注册视图方法中 同时调用储存 realm 和 对应的全局数组
     }
     
     

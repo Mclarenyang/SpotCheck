@@ -20,17 +20,22 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     // 随机选择学生的view
     var checkView: UIView!
-    var checkNum : UILabel!
     var Mycheck = NumberMorphView()
     
+    // 抽取的学生数
     var stuNnm : String!
     
+    //班级号 点击跳转的班级
+    var classNum : String!
     
+    // 返回按钮
     var leftbtn = UIButton()
-    //分段控件
+    
+    // 分段控件
     let segments = ["学生表","抽取"]
     var segmentedControl = UISegmentedControl()
     
+    // 测试
     let anm :[(String,String)] = [("大象","2014210344"),("兔子","2014210344"),("松鼠","2014210344"),("河豚","2014210344"),("袋鼠","2014210344"),("袋熊","2014210344")]
     
     override func viewDidLoad() {
@@ -193,6 +198,17 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     
+    // 获取学生的信息并储存
+    func getInfoByClass(){
+        
+        //step1: 网络请求
+        //step2: 储存信息with realm
+        //step3: 将信息填入到表中
+    }
+    
+    
+    
+    
     // 点击跳转事件
     // table
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -202,15 +218,9 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         let PostView = postScoreViewController()
         PostView.stuNum = 1
         PostView.viewTag = 1001
+        PostView.state = 2104210388 //点击学生的学号
         self.navigationController?.pushViewController(PostView, animated: true)
 
-    }
-    
-    // navigationbar
-    func leftBtnTap(_:UIButton){
-        
-        _ = self.navigationController?.popViewController(animated: true)
-        self.segmentedControl.isHidden = true
     }
     
     // 随机
@@ -221,6 +231,14 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         PostView.viewTag = 1000 + Int(self.stuNnm)!
         self.navigationController?.pushViewController(PostView, animated: true)
     }
+
+    // navigationbar
+    func leftBtnTap(_:UIButton){
+        
+        _ = self.navigationController?.popViewController(animated: true)
+        self.segmentedControl.isHidden = true
+    }
+    
 
     /*
     // MARK: - Navigation

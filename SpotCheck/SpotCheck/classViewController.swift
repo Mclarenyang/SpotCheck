@@ -43,15 +43,7 @@ class classViewController: UIViewController {
         self.view.addSubview(backgView)
         
         //测试
-        peopleNum_1.text = "23"
-        major_1.text = "通信软件教学班"
-        classNum1.text = "01041401"
-        peopleNum_2.text = "34"
-        major_2.text = "信息论教学班"
-        classNum2.text = "01041402"
-        peopleNum_3.text = "39"
-        major_3.text = "信息系统教学班"
-        classNum3.text = "01041401"
+        classInfoUpdate()
         
         //3 Class
         let classCell_1 = UIView(frame: CGRect(x:40,y:114,width:344,height:130))
@@ -119,10 +111,26 @@ class classViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    //更新班级信息
+    func classInfoUpdate(){
+        
+        //测试 boom 没有做接口
+        peopleNum_1.text = "10"
+        major_1.text = "通信软件教学班1"
+        classNum1.text = "01041401"
+        peopleNum_2.text = "09"
+        major_2.text = "通信软件教学班2"
+        classNum2.text = "01041402"
+        peopleNum_3.text = "10"
+        major_3.text = "通信软件教学班3"
+        classNum3.text = "01041403"
+    }
+    
     //跳转
     func tapClass1() {
         
         let  stuview = stuViewController()
+        stuview.classNum = classNum1.text
         self.navigationController?.pushViewController(stuview, animated: true)
         
     }
@@ -130,6 +138,7 @@ class classViewController: UIViewController {
     func tapClass2() {
         
         let  stuview = stuViewController()
+        stuview.classNum = classNum2.text
         self.navigationController?.pushViewController(stuview, animated: true)
         
     }
@@ -137,6 +146,7 @@ class classViewController: UIViewController {
     func tapClass3() {
         
         let  stuview = stuViewController()
+        stuview.classNum = classNum3.text
         self.navigationController?.pushViewController(stuview, animated: true)
         
     }
