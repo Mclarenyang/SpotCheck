@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Spring
 
 class classViewController: UIViewController {
     
@@ -24,7 +25,6 @@ class classViewController: UIViewController {
     var classNum1 = UILabel(frame: CGRect(x:150,y:73,width:152,height:33))
     var classNum2 = UILabel(frame: CGRect(x:150,y:73,width:152,height:33))
     var classNum3 = UILabel(frame: CGRect(x:150,y:73,width:152,height:33))
-    
     
     
     override func viewDidLoad() {
@@ -126,11 +126,13 @@ class classViewController: UIViewController {
         classNum3.text = "01041403"
     }
     
+    
     //跳转
     func tapClass1() {
         
         let  stuview = stuViewController()
-        stuview.classNum = classNum1.text
+        // 字符串截取 ／ 请求格式需求
+        stuview.classNum = String(NSString(string: classNum1.text!).substring(from: 1))
         self.navigationController?.pushViewController(stuview, animated: true)
         
     }
@@ -138,7 +140,7 @@ class classViewController: UIViewController {
     func tapClass2() {
         
         let  stuview = stuViewController()
-        stuview.classNum = classNum2.text
+        stuview.classNum = String(NSString(string: classNum2.text!).substring(from: 1))
         self.navigationController?.pushViewController(stuview, animated: true)
         
     }
@@ -146,7 +148,7 @@ class classViewController: UIViewController {
     func tapClass3() {
         
         let  stuview = stuViewController()
-        stuview.classNum = classNum3.text
+        stuview.classNum = String(NSString(string: classNum3.text!).substring(from: 1))
         self.navigationController?.pushViewController(stuview, animated: true)
         
     }

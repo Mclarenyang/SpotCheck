@@ -21,7 +21,7 @@ class stuScoreView: SpringView {
     
     //网络请求对应的打分Id
     
-    var stuId : String!
+    var stuId : Int!
     
     
     /*

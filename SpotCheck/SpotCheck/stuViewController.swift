@@ -8,6 +8,9 @@
 
 import UIKit
 import NumberMorphView
+import RealmSwift
+import Alamofire
+import SwiftyJSON
 
 class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
 
@@ -25,7 +28,7 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     // 抽取的学生数
     var stuNnm : String!
     
-    //班级号 点击跳转的班级
+    // 班级号 点击跳转的班级
     var classNum : String!
     
     // 返回按钮
@@ -35,12 +38,16 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     let segments = ["学生表","抽取"]
     var segmentedControl = UISegmentedControl()
     
-    // 测试
-    let anm :[(String,String)] = [("大象","2014210344"),("兔子","2014210344"),("松鼠","2014210344"),("河豚","2014210344"),("袋鼠","2014210344"),("袋熊","2014210344")]
+    // 接收数据库信息
+    var students : Results<Student>?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // 加载数据
+        getInfoByClass()
+        
         /// 设置tableview
         self.tableView = UITableView(frame: CGRect(x:0,y:0,width:screenWidth,height:screenHeight))
         self.tableView.tableHeaderView?.isHidden = true
@@ -83,7 +90,7 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     // tableview行数
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return anm.count
+        return (students?.count)!
     }
     
     // tableview 加载cell
@@ -92,11 +99,14 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         /// 定义cell
         let cell = UITableViewCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: "cellId")
         // 读取数据
-        let name = anm[indexPath.row].0
-        let time = anm[indexPath.row].1
+        let name = students?[indexPath.row].name
+        let sno = String(describing: (students?[indexPath.row].sno)!)
+        
+//        let name = anm[indexPath.row].0
+//        let time = anm[indexPath.row].1
         
         cell.textLabel?.text = name
-        cell.detailTextLabel?.text = time
+        cell.detailTextLabel?.text = sno
         
         return cell
     }
@@ -204,6 +214,48 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         //step1: 网络请求
         //step2: 储存信息with realm
         //step3: 将信息填入到表中
+        
+        let limit = "0"
+        let url = "http://123.207.169.62:8080/callname/api/show/studentsInfo?classNumber=\(self.classNum!)&limit=\(limit)"
+        
+        Alamofire.request(url, method: .post).responseJSON{
+            classStudents in
+            
+//            print(classStudents)
+            
+            if let value = classStudents.result.value{
+                
+                let json = JSON(value)
+                
+                let students = json["obj"]
+                
+//                print(students)
+                
+                for (_ , subJson):(String, JSON) in students{
+                    
+                    let friend = Student()
+                    
+                    friend.name = subJson["name"].string!
+                    friend.sex = subJson["sex"].string!
+                    friend.classNumber = subJson["classNumber"].string!
+                    friend.sno = subJson["sno"].int!
+                    friend.totalScore = subJson["totalScore"].int!
+                    friend.times = subJson["times"].int!
+                    
+                    let realm = try! Realm()
+                    try! realm.write {
+                        realm.add(friend, update: true)
+                    }
+                    // 数据库地址
+//                    print(realm.configuration.fileURL!)
+                    
+                }
+            }
+        }
+        
+        let realm = try! Realm()
+        self.students = realm.objects(Student.self).filter("classNumber = '\(self.classNum!)'")
+
     }
     
     
@@ -212,13 +264,14 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     // 点击跳转事件
     // table
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // 点击行
-        NSLog(String(indexPath.row))
+        
         // 跳转传值
         let PostView = postScoreViewController()
         PostView.stuNum = 1
         PostView.viewTag = 1001
-        PostView.state = 2104210388 //点击学生的学号
+        PostView.classNum = self.classNum
+        // 单点传学号
+        PostView.state = (students?[indexPath.row].sno)!
         self.navigationController?.pushViewController(PostView, animated: true)
 
     }
@@ -228,7 +281,9 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         
         let PostView = postScoreViewController()
         PostView.stuNum = Int(self.stuNnm)!
+        PostView.classNum = self.classNum!
         PostView.viewTag = 1000 + Int(self.stuNnm)!
+        PostView.state = 0
         self.navigationController?.pushViewController(PostView, animated: true)
     }
 

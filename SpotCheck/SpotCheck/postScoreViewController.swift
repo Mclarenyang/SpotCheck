@@ -8,6 +8,9 @@
 
 import UIKit
 import Spring
+import Alamofire
+import SwiftyJSON
+import RealmSwift
 
 
 class postScoreViewController: UIViewController {
@@ -19,6 +22,7 @@ class postScoreViewController: UIViewController {
     
     // 抽取状态
     var state = 0
+    var classNum : String!
     
     // Back Button
     var leftbtn = UIButton()
@@ -70,6 +74,19 @@ class postScoreViewController: UIViewController {
         lastBtn.isHidden = true
         
         regView()
+        
+        ///手势
+        // 左滑
+        let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(sender:)))
+        swipeUpGesture.direction = UISwipeGestureRecognizerDirection.left
+        self.view.addGestureRecognizer(swipeUpGesture)
+        
+        
+        // 右滑
+        let swipeDownGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(sender:)))
+        swipeDownGesture.direction = UISwipeGestureRecognizerDirection.right
+        self.view.addGestureRecognizer(swipeDownGesture)
+
         // Do any additional setup after loading the view.
     }
 
@@ -78,7 +95,29 @@ class postScoreViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    // 滑动手势触发
+    func handleSwipeGesture(sender: UISwipeGestureRecognizer){
+        
+        //划动的方向
+        let direction = sender.direction
+        //判断是上下左右
+        switch  direction {
+        case UISwipeGestureRecognizerDirection.left:
+            nextBtnTap()
+            break
+        case UISwipeGestureRecognizerDirection.right:
+            lastBtnTap()
+            break
+        case UISwipeGestureRecognizerDirection.up:
+            break
+        case UISwipeGestureRecognizerDirection.down:
+            break
+        default:
+            break
+        }
+    }
 
+    // 卡片视图
     func regView(){
         
         for i in 1...stuNum {
@@ -107,14 +146,10 @@ class postScoreViewController: UIViewController {
             stuView.Score.keyboardType = .numbersAndPunctuation
             stuView.Score.textAlignment = .center
             
-            // 测试
-            stuView.stuId = "网络返回的 Id"
-            stuView.classNum.text = "2014210386"
-            stuView.name.text = "吴啟弘"
-            stuView.AllScore.text = "总分 11"
-            stuView.Score.text = "+2"
-            
+           
         }
+        // 注册数据
+        getInfo()
        
     }
     
@@ -122,7 +157,8 @@ class postScoreViewController: UIViewController {
         
         let topView = view.viewWithTag(viewTag) as! stuScoreView
         //移除动画（will）
-        topView.x = -300
+        topView.x = -400
+        topView.rotate = 110
         topView.animateToNext {
             topView.curve = "EaseIn"
             topView.animateTo()
@@ -173,6 +209,7 @@ class postScoreViewController: UIViewController {
         }
         
          nextOne()
+        postScore()
     }
     
     
@@ -197,7 +234,7 @@ class postScoreViewController: UIViewController {
         }
 
         lastOne()
-        print(viewTag)
+
     }
     
     func postScore(){
@@ -205,23 +242,80 @@ class postScoreViewController: UIViewController {
         //step1: 获取当前的最上层显示视图 as stuScoreView()
         //step2: 获取视图的 Id 和 分数
         //step3: 网络请求提交分数
+        let nowView = self.view.viewWithTag(viewTag) as! stuScoreView
+        
+        let url = "http://123.207.169.62:8080/callname/api/operate/markScore?id=\(nowView.stuId)&sno=\(nowView.classNum.text)&score=\(nowView.Score.text)"
+        
+        Alamofire.request(url, method: .post).responseJSON{
+            bool in
+            
+            if let value = bool.result.value{
+            
+                let json = JSON(value)
+                let how = json["obj"]
+                print(how)
+            }
+        }
+        
     }
     
     func getInfo(){
         
-        if self.state == 0 {
-         
-            //随机抽取
-            
-        }else{
-        
-            //单个抽取
-            
-        }
-        
+        // 获取信息
         //step1: 网络请求  ->  type: [("stuId","stuNum")]
         //step2: 放入一个全局数组
         //step3: 在注册视图方法中 同时调用储存 realm 和 对应的全局数组
+        
+        if self.state == 0 {
+         
+            //随机抽取
+            let url = "http://123.207.169.62:8080/callname/api/show/studentsInfo?classNumber=\(self.classNum!)&limit=\(stuNum!)"
+            
+            Alamofire.request(url, method: .post).responseJSON{
+                randomCheckStudents in
+                
+                if let value = randomCheckStudents.result.value{
+                    
+                    let json = JSON(value)
+                    let students = json["obj"]
+                    
+                    var mytag = self.maxTag
+                    
+                    for (_ , subJson):(String, JSON) in students{
+                        
+                        let stuView = self.view.viewWithTag(mytag!) as! stuScoreView
+                        
+                        let sno = subJson["sno"].int!
+                        stuView.stuId = subJson["id"].int!
+                        
+                        let realm = try! Realm()
+                        let student = realm.objects(Student.self).filter("sno = \(sno)")[0]
+                        stuView.name.text = student.name
+                        // 后台接口返回的问题 故绕过此API从数据库读取
+                        stuView.AllScore.text = "附加总分：" + String(student.totalScore)
+                        
+                        mytag = mytag! - 1
+                    }
+                }
+            }
+            
+        }else{
+        
+            //单个抽取 state是学生的学号
+            let stuView = view.viewWithTag(viewTag) as! stuScoreView
+            
+            stuView.stuId = 0
+           
+            stuView.classNum.text = String(self.state)
+            
+            let realm = try! Realm()
+            let frient = realm.objects(Student.self).filter("sno = \(state)")[0]
+            
+            stuView.name.text = frient.name
+            stuView.AllScore.text = "附加总分：" + String(frient.totalScore)
+            
+        }
+        
     }
     
     
