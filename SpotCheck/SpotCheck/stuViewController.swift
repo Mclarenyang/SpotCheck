@@ -214,6 +214,7 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         //step1: 网络请求
         //step2: 储存信息with realm
         //step3: 将信息填入到表中
+        print(self.classNum!)
         
         let limit = "0"
         let url = "http://123.207.169.62:8080/callname/api/show/studentsInfo?classNumber=\(self.classNum!)&limit=\(limit)"

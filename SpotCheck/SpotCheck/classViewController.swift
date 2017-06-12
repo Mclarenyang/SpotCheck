@@ -82,7 +82,7 @@ class classViewController: UIViewController {
         classCell_2.addSubview(classNum2)
         
         classCell_2.isUserInteractionEnabled = true
-        let guesture2 = UITapGestureRecognizer(target:self, action:#selector(tapClass1))
+        let guesture2 = UITapGestureRecognizer(target:self, action:#selector(tapClass2))
         classCell_2.addGestureRecognizer(guesture2)
         
         let classCell_3 = UIView(frame: CGRect(x:40,y:438,width:344,height:130))
@@ -100,7 +100,7 @@ class classViewController: UIViewController {
         classCell_3.addSubview(classNum3)
         
         classCell_3.isUserInteractionEnabled = true
-        let guesture3 = UITapGestureRecognizer(target:self, action:#selector(tapClass1))
+        let guesture3 = UITapGestureRecognizer(target:self, action:#selector(tapClass3))
         classCell_3.addGestureRecognizer(guesture3)
         
         // Do any additional setup after loading the view.

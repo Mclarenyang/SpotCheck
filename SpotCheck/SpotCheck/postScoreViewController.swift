@@ -48,7 +48,7 @@ class postScoreViewController: UIViewController {
         leftbtn = UIButton(frame: CGRect(x:0,y:0,width:80,height:50))
         leftbtn.setTitle("<Back", for: .normal)
         leftbtn.setTitleColor(UIColor.white, for: .normal)
-        leftbtn.addTarget(self, action: #selector(leftBtnTap(_:)), for: UIControlEvents.touchUpInside)
+        leftbtn.addTarget(self, action: #selector(leftBtnTap), for: UIControlEvents.touchUpInside)
         let item = UIBarButtonItem(customView: leftbtn)
         self.navigationItem.leftBarButtonItem = item
         
@@ -200,11 +200,18 @@ class postScoreViewController: UIViewController {
         guard viewTag != 1001 else{
             
             let alert = UIAlertController(title: "警告", message: "全部打分完毕", preferredStyle: .alert)
-            let cancel = UIAlertAction(title: "提交", style: .cancel, handler: nil)
+            let cancel = UIAlertAction(title: "提交", style: .cancel, handler:{
+            action in
+            
+                self.leftBtnTap()
+                
+            })
             
             alert.addAction(cancel)
             self.present(alert, animated: true, completion: nil)
+            
             nextOne()
+            postScore()
             return
         }
         
@@ -242,10 +249,14 @@ class postScoreViewController: UIViewController {
         //step1: 获取当前的最上层显示视图 as stuScoreView()
         //step2: 获取视图的 Id 和 分数
         //step3: 网络请求提交分数
-        let nowView = self.view.viewWithTag(viewTag) as! stuScoreView
         
-        let url = "http://123.207.169.62:8080/callname/api/operate/markScore?id=\(nowView.stuId)&sno=\(nowView.classNum.text)&score=\(nowView.Score.text)"
+        let nowView = self.view.viewWithTag(viewTag+1) as! stuScoreView
         
+        print(nowView.stuId)
+        print(nowView.classNum.text!)
+        print(nowView.Score.text!)
+        
+        let url = "http://123.207.169.62:8080/callname/api/operate/markScore?id=\(nowView.stuId!)&sno=\(nowView.classNum.text!)&score=\(nowView.Score.text!)"
         Alamofire.request(url, method: .post).responseJSON{
             bool in
             
@@ -286,6 +297,7 @@ class postScoreViewController: UIViewController {
                         let stuView = self.view.viewWithTag(mytag!) as! stuScoreView
                         
                         let sno = subJson["sno"].int!
+                        stuView.classNum.text = String(sno)
                         stuView.stuId = subJson["id"].int!
                         
                         let realm = try! Realm()
@@ -293,6 +305,9 @@ class postScoreViewController: UIViewController {
                         stuView.name.text = student.name
                         // 后台接口返回的问题 故绕过此API从数据库读取
                         stuView.AllScore.text = "附加总分：" + String(student.totalScore)
+                        
+                        // 初始分数
+                        stuView.Score.text = "2"
                         
                         mytag = mytag! - 1
                     }
@@ -305,8 +320,9 @@ class postScoreViewController: UIViewController {
             let stuView = view.viewWithTag(viewTag) as! stuScoreView
             
             stuView.stuId = 0
-           
             stuView.classNum.text = String(self.state)
+            // 初始分数
+            stuView.Score.text = "2"
             
             let realm = try! Realm()
             let frient = realm.objects(Student.self).filter("sno = \(state)")[0]
@@ -318,11 +334,19 @@ class postScoreViewController: UIViewController {
         
     }
     
+    func viewGoodBy(){
+        
+        for i in 1000...maxTag {
+            self.view.viewWithTag(i)?.removeFromSuperview()
+        }
+    }
+    
     
     // 跳转
     // navigationbar
-    func leftBtnTap(_:UIButton){
+    func leftBtnTap(){
 
+        viewGoodBy()
         _ = self.navigationController?.popViewController(animated: true)
         
     }
