@@ -21,6 +21,7 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     // tableview
     var tableView: UITableView!
     
+    
     // 随机选择学生的view
     var checkView: UIView!
     var Mycheck = NumberMorphView()
@@ -54,6 +55,7 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.view.addSubview(self.tableView)
+        
         
         // 返回
         self.navigationItem.hidesBackButton = true
@@ -208,6 +210,11 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     
+    // 刷新表格
+    func refreshTableView(){
+        
+    }
+    
     // 获取学生的信息并储存
     func getInfoByClass(){
         
@@ -217,12 +224,10 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         print(self.classNum!)
         
         let limit = "0"
-        let url = "http://123.207.169.62:8080/callname/api/show/studentsInfo?classNumber=\(self.classNum!)&limit=\(limit)"
+        let url = "http://192.168.2.180:8080/callname/api/show/studentsInfo?classNumber=\(self.classNum!)&limit=\(limit)"
         
         Alamofire.request(url, method: .post).responseJSON{
             classStudents in
-            
-//            print(classStudents)
             
             if let value = classStudents.result.value{
                 
@@ -230,7 +235,6 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
                 
                 let students = json["obj"]
                 
-//                print(students)
                 
                 for (_ , subJson):(String, JSON) in students{
                     
@@ -247,8 +251,9 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
                     try! realm.write {
                         realm.add(friend, update: true)
                     }
+                    
                     // 数据库地址
-//                    print(realm.configuration.fileURL!)
+                    // print(realm.configuration.fileURL!)
                     
                 }
             }
@@ -258,9 +263,6 @@ class stuViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         self.students = realm.objects(Student.self).filter("classNumber = '\(self.classNum!)'")
 
     }
-    
-    
-    
     
     // 点击跳转事件
     // table

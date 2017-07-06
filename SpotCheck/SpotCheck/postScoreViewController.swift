@@ -256,7 +256,8 @@ class postScoreViewController: UIViewController {
         print(nowView.classNum.text!)
         print(nowView.Score.text!)
         
-        let url = "http://123.207.169.62:8080/callname/api/operate/markScore?id=\(nowView.stuId!)&sno=\(nowView.classNum.text!)&score=\(nowView.Score.text!)"
+        //123.207.169.62
+        let url = "http://192.168.2.180:8080/callname/api/operate/markScore?id=\(nowView.stuId!)&sno=\(nowView.classNum.text!)&score=\(nowView.Score.text!)"
         Alamofire.request(url, method: .post).responseJSON{
             bool in
             
@@ -280,7 +281,7 @@ class postScoreViewController: UIViewController {
         if self.state == 0 {
          
             //随机抽取
-            let url = "http://123.207.169.62:8080/callname/api/show/studentsInfo?classNumber=\(self.classNum!)&limit=\(stuNum!)"
+            let url = "http://192.168.2.180:8080/callname/api/show/studentsInfo?classNumber=\(self.classNum!)&limit=\(stuNum!)"
             
             Alamofire.request(url, method: .post).responseJSON{
                 randomCheckStudents in
@@ -289,6 +290,8 @@ class postScoreViewController: UIViewController {
                     
                     let json = JSON(value)
                     let students = json["obj"]
+                    
+                    print(students)
                     
                     var mytag = self.maxTag
                     
