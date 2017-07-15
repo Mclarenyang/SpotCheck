@@ -156,7 +156,7 @@ class postScoreViewController: UIViewController {
     func nextOne(){
         
         let topView = view.viewWithTag(viewTag) as! stuScoreView
-        //移除动画（will）
+        //移除动画
         topView.x = -400
         topView.rotate = 110
         topView.animateToNext {
@@ -170,7 +170,7 @@ class postScoreViewController: UIViewController {
     func lastOne(){
         
         let lastView = view.viewWithTag(viewTag+1) as! stuScoreView
-        //移入动画（will）
+        //移入动画
         lastView.x = 0
         lastView.animateToNext {
             lastView.curve = "EaseIn"
