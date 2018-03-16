@@ -11,3 +11,7 @@
 2. Alamofire 网络请求
 3. SwiftyJson Json数据解析
 4. Spring 动画库
+
+### 客户端屏幕设计图
+![客户端屏幕设计图](https://github.com/Mclarenyang/spotCheck/raw/master/Resources/WXpicture@2x.png)
+
